@@ -38,25 +38,31 @@ function Circle(x, y, r, dx, dy){
     this.x = x;
     this.y = y;
     this.radius = r;
+    this.dx = dx;
+    this.dy = dy;
 
     this.draw = function() {
-        console.log('New circle', this.x, this.y);
         c.beginPath();
-        c.arc(x, y, radius, 0, Math.PI * 2, false);
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         c.closePath();
         c.stroke();
+        c.fill();
     }
 
     this.update = function(){
-        if(x + radius > innerWidth || x - radius < 0){
-            dx = -dx;
+        if(this.x + this.radius > innerWidth || 
+            this.x - this.radius < 0){
+            this.dx = -this.dx;
         }
-        if(y + radius > innerHeight || y - radius < 0){
-            dy = -dy;
+        if(this.y + this.radius > innerHeight || 
+            this.y - this.radius < 0){
+            this.dy = -this.dy;
         }
     
-        x += dx;
-        y += dy;
+        this.x += this.dx;
+        this.y += this.dy;
+
+        this.draw();
     }
 }
 
@@ -66,9 +72,15 @@ var dx = (Math.random() - 0.5) * 8;
 var dy = (Math.random() - 0.5) * 8;
 var radius = 20;
 
+var circle1 = new Circle(x, y, radius, dx, dy);
+
 function animate() {
     requestAnimationFrame(animate);
-    var circle = new Circle(x, y, radius, dx, dy);
+    
+    c.clearRect(0,0, innerWidth, innerHeight);
+    
+    circle1.update();    
+
 }
 
 animate();
