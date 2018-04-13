@@ -11,6 +11,7 @@ function randomHex(){
 
 var _mouse = {
     move: {
+        isActive: false,
         x: null,
         y: null
     },
@@ -28,21 +29,23 @@ var _mouse = {
 window.addEventListener('mousemove', m => {
     if(_mouse.down.isActive){
         // console.log('mousemove', m);
+        _mouse.move.isActive = true;
         _mouse.move.x = m.x;
         _mouse.move.y = m.y;
     }
 });
 
 window.addEventListener('mousedown', m => {
-    // console.log('mousedown', m);
+    console.log('mousedown', m.x, m.y);
     _mouse.down.isActive = true;
     _mouse.down.x = m.x;
     _mouse.down.y = m.y;
 });
 
 window.addEventListener('mouseup', m => {
-    // console.log('mouseup', m);
-    _mouse.down.isActive = false;    
+    console.log('mouseup', m.x, m.y);
+    _mouse.move.isActive = false;
+    _mouse.down.isActive = false;
     _mouse.up.x = m.x;
     _mouse.up.y = m.y;
 });
@@ -85,30 +88,27 @@ function Circle(x, y, r, dx, dy){
 
     this.update = function(){
 
-        if (this.x + this.radius >= innerWidth || 
-            this.x - this.radius <= 0){
+        if (this.x + this.radius > innerWidth || 
+            this.x - this.radius < 0){
             this.dx = -this.dx;
         }
         
-        if (this.y + this.radius >= innerHeight || 
-            this.y - this.radius <= 0){
+        if (this.y + this.radius > innerHeight || 
+            this.y - this.radius < 0){
             this.dy = -this.dy;
         }
-    
-        //Current position
-        // this.x += this.dx;
-        // this.y += this.dy;
-
+          
         //Interact with mouse
-        // if(_mouse.down.isActive && (_mouse.x - this.x < 50)){
-        if(_mouse.down.isActive && (_mouse.move.x >= (this.x))){
-            // console.log('moving');
-            this.x = _mouse.down.x;
-            this.y = _mouse.down.y;
-        }else{
-            this.x += this.dx;
-            this.y += this.dy;
+        if (_mouse.move.isActive){   
+            if ((_mouse.down.x >= this.x) && (_mouse.down.y >= this.y)){
+                this.x = _mouse.move.x;
+                this.y = _mouse.move.y;    
+            }
         }
+
+        //Current position
+        this.x += this.dx;
+        this.y += this.dy;
 
         this.draw();
     }
