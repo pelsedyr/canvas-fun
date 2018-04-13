@@ -4,35 +4,6 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var c = canvas.getContext('2d');
-// console.log(canvas);
-// console.log(c);
-
-// c.fillRect(100, 100, 100, 100);
-
-// //Line
-// c.beginPath();
-// c.moveTo(50,300);
-// c.lineTo(300, 100);
-// c.stroke();
-
-// //Arc
-// c.arc(300, 300, 30, 0, Math.PI * 2, false);
-// c.stroke();
-
-function getRandCoord(dir){
-    switch(dir){
-        case 'x':
-            return Math.floor((Math.random() * innerWidth) + 1);
-            break;
-        case 'y':
-            return Math.floor((Math.random() * innerHeight) + 1);
-            break;
-        default: return 1;
-    }
-}
-
-console.log(getRandCoord('x'));
-console.log(getRandCoord('y'));
 
 function Circle(x, y, r, dx, dy){
     this.x = x;
@@ -40,7 +11,7 @@ function Circle(x, y, r, dx, dy){
     this.radius = r;
     this.dx = dx;
     this.dy = dy;
-
+    
     this.draw = function() {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
@@ -66,21 +37,27 @@ function Circle(x, y, r, dx, dy){
     }
 }
 
-var x = Math.random() * innerWidth;
-var y = Math.random() * innerHeight;
-var dx = (Math.random() - 0.5) * 8;
-var dy = (Math.random() - 0.5) * 8;
-var radius = 20;
+var circles = [];
+for (var i = 0; i < 100; i++){
 
-var circle1 = new Circle(x, y, radius, dx, dy);
+    var x = Math.random() * innerWidth;
+    var y = Math.random() * innerHeight;
+    var radius = Math.floor((Math.random() * 20) + 1);
+    var dx = (Math.random() - 0.5) * 8;
+    var dy = (Math.random() - 0.5) * 8;
+
+    circles.push(new Circle(x, y, radius, dx, dy));
+}
+
 
 function animate() {
     requestAnimationFrame(animate);
     
     c.clearRect(0,0, innerWidth, innerHeight);
-    
-    circle1.update();    
-
+    // circle1.update();
+    circles.forEach(circle => {
+        circle.update();
+    })
 }
 
 animate();
