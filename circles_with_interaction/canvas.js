@@ -27,25 +27,41 @@ var _mouse = {
 
 window.addEventListener('mousemove', m => {
     if(_mouse.down.isActive){
-        console.log('mousemove', m);
+        // console.log('mousemove', m);
         _mouse.move.x = m.x;
         _mouse.move.y = m.y;
     }
 });
 
 window.addEventListener('mousedown', m => {
-    console.log('mousedown', m);
+    // console.log('mousedown', m);
     _mouse.down.isActive = true;
     _mouse.down.x = m.x;
     _mouse.down.y = m.y;
 });
 
 window.addEventListener('mouseup', m => {
-    console.log('mouseup', m);
+    // console.log('mouseup', m);
     _mouse.down.isActive = false;    
     _mouse.up.x = m.x;
     _mouse.up.y = m.y;
 });
+
+function CircleText(x, y, r, dx, dy){
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.dx = dx;
+    this.dy = dy;
+
+    this.draw = function(){
+        c.font = '10px Arial';
+        c.fillStyle='black';
+        c.fillText(`${this.x.toFixed(0)} | ${this.y.toFixed(0)}`, this.x - this.r - 10, this.y - this.r - 10);
+        c.fillText(`${this.dx.toFixed(0)} | ${this.dy.toFixed(0)}`, this.x - this.r, this.y - this.r);
+    }
+
+}
 
 function Circle(x, y, r, dx, dy){
     this.x = x;
@@ -60,32 +76,39 @@ function Circle(x, y, r, dx, dy){
         c.fillStyle = hex;
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.closePath();
         c.stroke();
         c.fill();
+        c.closePath();
+        // console.log(dx);
+        new CircleText(this.x, this.y, this.radius,this.dx, this.dy).draw();
     }
 
     this.update = function(){
 
-        if (this.x + this.radius > innerWidth || 
-            this.x - this.radius < 0){
+        if (this.x + this.radius >= innerWidth || 
+            this.x - this.radius <= 0){
             this.dx = -this.dx;
         }
         
-        if (this.y + this.radius > innerHeight || 
-            this.y - this.radius < 0){
+        if (this.y + this.radius >= innerHeight || 
+            this.y - this.radius <= 0){
             this.dy = -this.dy;
         }
     
         //Current position
-        this.x += this.dx;
-        this.y += this.dy;
+        // this.x += this.dx;
+        // this.y += this.dy;
 
         //Interact with mouse
-        // if(_mouse.x - this.x < 50){
-        //     this.x = _mouse.x;
-        //     this.y = _mouse.y;
-        // }
+        // if(_mouse.down.isActive && (_mouse.x - this.x < 50)){
+        if(_mouse.down.isActive && (_mouse.move.x >= (this.x))){
+            // console.log('moving');
+            this.x = _mouse.down.x;
+            this.y = _mouse.down.y;
+        }else{
+            this.x += this.dx;
+            this.y += this.dy;
+        }
 
         this.draw();
     }
