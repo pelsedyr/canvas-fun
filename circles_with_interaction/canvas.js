@@ -69,7 +69,7 @@ function CircleText(x, y, r, dx, dy){
 function Circle(x, y, r, dx, dy){
     this.x = x;
     this.y = y;
-    this.radius = r;
+    this.r = r;
     this.dx = dx;
     this.dy = dy;
     var hex = randomHex();    
@@ -78,37 +78,37 @@ function Circle(x, y, r, dx, dy){
         c.strokeStyle = hex;
         c.fillStyle = hex;
         c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        c.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
         c.stroke();
         c.fill();
         c.closePath();
         // console.log(dx);
-        new CircleText(this.x, this.y, this.radius,this.dx, this.dy).draw();
+        new CircleText(this.x, this.y, this.r,this.dx, this.dy).draw();
     }
 
     this.update = function(){
 
-        if (this.x + this.radius > innerWidth || 
-            this.x - this.radius < 0){
+        if (this.x + this.r > innerWidth || 
+            this.x - this.r < 0){
             this.dx = -this.dx;
         }
         
-        if (this.y + this.radius > innerHeight || 
-            this.y - this.radius < 0){
+        if (this.y + this.r > innerHeight || 
+            this.y - this.r < 0){
             this.dy = -this.dy;
         }
           
-        //Interact with mouse
+        //Current position
+        this.x += this.dx;
+        this.y += this.dy;
+
+               //Interact with mouse
         if (_mouse.move.isActive){   
-            if ((_mouse.down.x >= this.x) && (_mouse.down.y >= this.y)){
+            if ((_mouse.down.x <= this.x + this.r) && (_mouse.down.y <= this.y + this.r)){
                 this.x = _mouse.move.x;
                 this.y = _mouse.move.y;    
             }
         }
-
-        //Current position
-        this.x += this.dx;
-        this.y += this.dy;
 
         this.draw();
     }
