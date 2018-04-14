@@ -9,6 +9,11 @@ function randomHex(){
     return `#${(Math.random()*0xFFFFFF<<0).toString(16)}`;
 }
 
+randomColorPalette = () => {
+    var colors = ['#004072', '#0078A5', '#8FC5CD', '#00A2C6', '#00667F'];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
 var _mouse = {
     move: {
         isActive: false,
@@ -26,28 +31,40 @@ var _mouse = {
     }
 }
 
+const MAX_RADIUS = 40;
+const MIN_RADIUS = 2;
+
 window.addEventListener('mousemove', m => {
-    if(_mouse.down.isActive){
-        // console.log('mousemove', m);
-        _mouse.move.isActive = true;
-        _mouse.move.x = m.x;
-        _mouse.move.y = m.y;
-    }
+    // console.log("Mouse move", _mouse.move.x, _mouse.move.y);
+    _mouse.move.isActive = true;
+    _mouse.move.x = m.x;
+    _mouse.move.y = m.y;
+});
+
+window.addEventListener('mouseout', m => {
+    _mouse.move.isActive = false;
+    _mouse.move.x = null;
+    _mouse.move.y = null;
 });
 
 window.addEventListener('mousedown', m => {
-    console.log('mousedown', m.x, m.y);
     _mouse.down.isActive = true;
     _mouse.down.x = m.x;
     _mouse.down.y = m.y;
 });
 
 window.addEventListener('mouseup', m => {
-    console.log('mouseup', m.x, m.y);
     _mouse.move.isActive = false;
     _mouse.down.isActive = false;
     _mouse.up.x = m.x;
     _mouse.up.y = m.y;
+});
+
+//Resize canvas according to the window size
+window.addEventListener('resize', event => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
 });
 
 function CircleText(x, y, r, dx, dy){
@@ -72,7 +89,8 @@ function Circle(x, y, r, dx, dy){
     this.r = r;
     this.dx = dx;
     this.dy = dy;
-    var hex = randomHex();    
+    this.minRadius = r;
+    var hex = randomColorPalette();    
     
     this.draw = function() {
         c.strokeStyle = hex;
@@ -83,7 +101,7 @@ function Circle(x, y, r, dx, dy){
         c.fill();
         c.closePath();
         // console.log(dx);
-        new CircleText(this.x, this.y, this.r,this.dx, this.dy).draw();
+        // new CircleText(this.x, this.y, this.r,this.dx, this.dy).draw();
     }
 
     this.update = function(){
@@ -102,12 +120,15 @@ function Circle(x, y, r, dx, dy){
         this.x += this.dx;
         this.y += this.dy;
 
-               //Interact with mouse
-        if (_mouse.move.isActive){   
-            if ((_mouse.down.x <= this.x + this.r) && (_mouse.down.y <= this.y + this.r)){
-                this.x = _mouse.move.x;
-                this.y = _mouse.move.y;    
-            }
+        //Interact with mouse
+
+        if (_mouse.move.x - this.x < 50 && _mouse.move.x - this.x > -50 &&
+            _mouse.move.y - this.y < 50 && _mouse.move.y -this.y > -50){
+                if(this.r < MAX_RADIUS){
+                    this.r += 1;
+                }
+        } else if (this.r > this.minRadius){
+            this.r -= 1;
         }
 
         this.draw();
@@ -115,17 +136,18 @@ function Circle(x, y, r, dx, dy){
 }
 
 var circles = [];
-for (var i = 0; i < 100; i++){
+init = () => {
+    circles = [];
+    for (var i = 0; i < 200; i++){
+        var r = Math.floor((Math.random() * 10) + 1);
+        var x = Math.random() * (innerWidth - r * 2) + r;
+        var y = Math.random() * (innerHeight - r * 2) + r;
+        var dx = (Math.random() - 0.5) * 2;
+        var dy = (Math.random() - 0.5) * 2;
 
-    var x = Math.random() * innerWidth;
-    var y = Math.random() * innerHeight;
-    var radius = Math.floor((Math.random() * 30) + 1);
-    var dx = (Math.random() - 0.5) * 7;
-    var dy = (Math.random() - 0.5) * 7;
-
-    circles.push(new Circle(x, y, radius, dx, dy));
+        circles.push(new Circle(x, y, r, dx, dy));
+    }
 }
-
 
 function animate() {
     requestAnimationFrame(animate);
@@ -137,4 +159,5 @@ function animate() {
     })
 }
 
+init();
 animate();
