@@ -43,18 +43,18 @@ function distance(x1, y1, x2, y2) {
 }
 
 // Objects
-function Object(x, y, radius, color) {
-    this.x = x
-    this.y = y
-    this.radius = radius
-    this.color = color
+function Circle(x, y, radius, color) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
 }
 
-Object.prototype.update = function() {
+Circle.prototype.update = function() {
     this.draw()
 }
 
-Object.prototype.draw = function() {
+Circle.prototype.draw = function() {
     c.beginPath()
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
     c.fillStyle = this.color
@@ -63,24 +63,29 @@ Object.prototype.draw = function() {
 }
 
 // Implementation
-let objects
+let circle1;
+let circle2;
 function init() {
-    objects = []
 
-    for (let i = 0; i < 400; i++) {
-        // objects.push();
-    }
+    circle1 = new Circle(300, 300, 100, 'black'); 
+    circle2 = new Circle(undefined, undefined, 30, 'blue'); 
 }
 
 // Animation Loop
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
+    circle1.update();
+    circle2.x = mouse.x;
+    circle2.y = mouse.y;
+    circle2.update();
 
-    c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y)
-    // objects.forEach(object => {
-    //  object.update();
-    // });
+    let dist = distance(circle1.x, circle1.y, circle2.x, circle2.y);
+    if(dist < circle1.radius + circle2.radius){
+        circle2.color = 'red';
+    }else{
+        circle2.color = 'blue';        
+    }
 }
 
 init()
