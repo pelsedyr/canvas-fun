@@ -32,6 +32,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   flex-direction: column;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 h1 {
@@ -40,6 +42,7 @@ h1 {
   font-family: "Pacifico", cursive;
   font-weight: 400;
   font-style: normal;
+  padding-bottom: 10px;
 }
 
 iframe {
@@ -59,6 +62,8 @@ iframe {
   background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
   filter: brightness(120%);
   border-radius: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .container:before {
