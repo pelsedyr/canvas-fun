@@ -19,7 +19,6 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  /* height: 100%; */
   flex-direction: column;
   padding-top: 30px;
   padding-bottom: 30px;
@@ -32,6 +31,7 @@ h1 {
   font-weight: 400;
   font-style: normal;
   padding-bottom: 10px;
+  color: #c850c09c;
 }
 
 iframe {
@@ -68,7 +68,7 @@ iframe {
 
 .overlay {
   background: rgb(0,0,0);
-  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); 
+  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 50%); 
   position: fixed;
   z-index: 100;
   height: 100vh;
