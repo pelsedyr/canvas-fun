@@ -48,8 +48,9 @@ h1 {
 
 iframe {
   margin: 0;
-  border: 0;
+  border: none;
   overflow: hidden;
+  scrollbar-width: none;
   z-index: 1;
   border-radius: 20px;
 }
