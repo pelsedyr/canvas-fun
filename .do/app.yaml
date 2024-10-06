@@ -1,0 +1,8 @@
+name: canvas-fun
+services:
+- environment_slug: node-js
+  github:
+    branch: master
+    deploy_on_push: true
+    repo: pelsedyr/canvas-fun
+  name: canvas-fun
