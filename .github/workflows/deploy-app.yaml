@@ -11,7 +11,19 @@ jobs:
    steps:
      - name: Checkout repository
        uses: actions/checkout@v4
-     - name: Deploy the app
+
+     - name: Set up Node.js
+       uses: actions/setup-node@v3
+       with:
+         node-version: '20'
+
+     - name: Install dependencies
+       run: npm install
+
+     - name: Build the app
+       run: npm run build
+
+     - name: Deploy to DigitalOcean App Platform
        uses: digitalocean/app_action/deploy@v2
        with:
-         token: ${{ secrets.DIGITAL_OCEAN_APP_SCOPE }} 
+         token: ${{ secrets.DIGITAL_OCEAN_APP_SCOPE }}
