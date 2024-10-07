@@ -1,6 +1,7 @@
 const overlay = document.getElementsByClassName("overlay")[0];
 window.addEventListener("scroll", () => {
-    if (window.screenY > 0) {
+    //window.scrollY does not work in Firefox
+    if (window.pageYOffset > 0) {
         overlay.classList.remove("unhidden");
         overlay.classList.add("hidden");
     }

@@ -1,14 +1,10 @@
-FROM node:20
+FROM nginx:1.27.2-alpine
 
-WORKDIR /app
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
-COPY package*.json ./
+COPY ./ /usr/share/nginx/html
 
-RUN npm install --only=production
+WORKDIR /usr/share/nginx/html
 
-COPY . .
-
-EXPOSE 80
-ENV PORT=80
-
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["nginx", "-g", "daemon off;"]
